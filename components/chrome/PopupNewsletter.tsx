@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
@@ -167,14 +168,11 @@ export default function PopupNewsletter({ image }: { image?: string | null }) {
                 {resultat && !resultat.ok && (
                   <p role="alert" className="mt-3 text-rose-sourd">
                     {resultat.message}{' '}
-                    <a
-                      href="https://tpgk.fr/contact/"
-                      target="_blank"
-                      rel="noreferrer"
+                    <Link href="/contact"
                       className="underline underline-offset-4"
                     >
                       Nous ecrire
-                    </a>
+                    </Link>
                   </p>
                 )}
 

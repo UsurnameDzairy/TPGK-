@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 /**
@@ -78,14 +79,11 @@ export default function FormNewsletter() {
       {resultat && !resultat.ok && (
         <p role="alert" className="mt-2.5 text-rose-sourd">
           {resultat.message}{' '}
-          <a
-            href="https://tpgk.fr/contact/"
-            target="_blank"
-            rel="noreferrer"
+          <Link href="/contact"
             className="underline underline-offset-4"
           >
             Nous ecrire
-          </a>
+          </Link>
         </p>
       )}
     </form>

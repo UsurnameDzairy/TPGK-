@@ -116,14 +116,11 @@ export default function PageMaison() {
             inventees ici. Le visiteur est renvoye au canal officiel. */}
         <p className="label-xs mt-8 text-gris">
           Adresses detaillees et horaires disponibles aupres de la boutique.{' '}
-          <a
-            href="https://tpgk.fr/nos-boutiques/"
-            target="_blank"
-            rel="noreferrer"
+          <Link href="/contact"
             className="lien-file text-encre"
           >
             Nous contacter
-          </a>
+          </Link>
         </p>
       </section>
 

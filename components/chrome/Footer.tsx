@@ -88,14 +88,11 @@ export default function Footer({ categories }: { categories: Categorie[] }) {
             </div>
 
 
-            <a
-              href="https://tpgk.fr/contact/"
-              target="_blank"
-              rel="noreferrer"
+            <Link href="/contact"
               className="label mt-5 inline-block border-b border-encre pb-1 transition-opacity hover:opacity-55"
             >
               Nous ecrire
-            </a>
+            </Link>
           </div>
         </div>
       </div>

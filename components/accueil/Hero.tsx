@@ -9,9 +9,10 @@ import { gsap, mouvementReduit } from '@/lib/animation';
 /**
  * Hero d'accueil.
  *
- * Un film de campagne monte a partir des medias reels de la maison : le
- * defile ralenti, puis des panoramiques lents le long des silhouettes.
- * Aucune image de synthese — les mannequins et les pieces sont les vraies. Le nom de la maison s'inscrit en tres grand serif au bas du cadre,
+ * Le plan du hero est un gros plan anime, genere a partir d'une photo reelle
+ * du catalogue : la piece et son decor sont ceux de la maison, seul le
+ * mouvement est calcule. Le film boucle en aller-retour, si bien que le
+ * mouvement ne se coupe jamais. Le nom de la maison s'inscrit en tres grand serif au bas du cadre,
  * volontairement rogne par le bord — le mot deborde de l'ecran comme une
  * signature apposee sur l'image.
  *
@@ -91,7 +92,7 @@ export default function Hero() {
           priority
           sizes="100vw"
           quality={90}
-          className="object-cover object-[center_30%]"
+          className="object-cover object-center"
         />
         <video
           ref={videoRef}
@@ -102,7 +103,7 @@ export default function Hero() {
           poster="/media/campagne-poster.webp"
           aria-hidden
           className={[
-            'absolute inset-0 h-full w-full object-cover object-[center_30%]',
+            'absolute inset-0 h-full w-full object-cover object-center',
             'transition-opacity duration-[1200ms]',
             videoActive ? 'opacity-100' : 'opacity-0',
           ].join(' ')}
