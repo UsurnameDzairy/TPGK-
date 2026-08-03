@@ -1,26 +1,293 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   TPGK — design system
+   Direction « luxe discret » : blanc pur, typographie fine et espacee, serif
+   Didone reserve aux grands moments. Ce sont les visuels qui portent la page,
+   pas les effets.
+   ========================================================================== */
+
+@theme {
+  /* --- couleurs (contrastes mesures sur fond blanc) --------------------- */
+  --color-blanc: #ffffff; /* fond principal */
+  --color-lin: #f2f0ee; /* fond des cadres image */
+  --color-filet: #e5e2de; /* bordures, separateurs */
+  --color-encre: #1d1d1d; /* texte principal — 16.86 */
+  --color-gris: #6a6a6a; /* texte secondaire — 5.02 */
+
+  /* Rose de marque TPGK. 3.06 sur blanc : insuffisant pour du texte courant,
+     reserve aux aplats et badges. Le texte pose dessus doit etre en encre. */
+  --color-rose: #ff4f9d;
+  /* Variante lisible pour un accent textuel (soldes, alertes) — 4.85. */
+  --color-rose-sourd: #d81b74;
+
+  --color-nuit: #141414; /* fonds sombres */
+
+  /* --- typographie ----------------------------------------------------- */
+  /* Serif Didone : le nom de la maison et les grands mots editoriaux.
+     Rien d'autre — c'est sa rarete qui lui donne son poids. */
+  --font-serif: var(--police-serif), "Didot", "Times New Roman", serif;
+  /* Sans geometrique : toute l'interface, en petits corps espaces. */
+  --font-sans: var(--police-sans), system-ui, sans-serif;
+
+  /* --- courbes d'animation --------------------------------------------- */
+  --ease-couture: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-volet: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    /* Lenis pilote le defilement : on neutralise le smooth natif. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Reserve la place du bandeau de preversion, fixe en bas d'ecran.
+     Sa hauteur depend du nombre de lignes du texte : large sur mobile,
+     plus compact ensuite. Sous-estimer cette reserve masquait le bas du
+     pied de page. */
+  body {
+    padding-bottom: 7rem;
+    background-color: var(--color-blanc);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* AUCUN `overflow` ici, volontairement.
+       `hidden` transformait le body en conteneur de defilement ; `clip` ne
+       vaut guere mieux : Safari cesse alors d'appliquer `position: sticky`
+       aux descendants, et des sections entieres disparaissaient a l'ecran.
+       Chaque bloc susceptible de deborder (bandeau defilant, bande de
+       collections, hero) porte deja son propre `overflow-hidden`. */
+  }
+
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* Les titres restent discrets : petits, en capitales espacees. La hierarchie
+     se joue par l'espace et la position, pas par la taille du corps. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-encre);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--color-rose);
+    color: var(--color-encre);
+  }
+
+  img,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (min-width: 768px) {
+  body {
+    /* bandeau de preversion : reserve plus courte sur grand ecran */
+    padding-bottom: 5rem;
+  }
+}
+
+@layer components {
+  /* Le serif : wordmark, titres de campagne, grands mots. Usage rare. */
+  .serif {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+
+  /* Libelles d'interface : navigation, boutons, prix, badges. */
+  .label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  .label-xs {
+    font-family: var(--font-sans);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* Nom et prix d'un produit : meme corps, poids differents, sur une ligne. */
+  .produit-nom {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    line-height: 1.45;
+  }
+
+  .produit-prix {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.45;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Bouton plein, rectangulaire, sans arrondi. */
+  .bouton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-encre);
+    color: var(--color-blanc);
+    padding: 1rem 2rem;
+    transition: opacity 0.35s var(--ease-couture);
+  }
+
+  .bouton:hover {
+    opacity: 0.82;
+  }
+
+  /* Bouton clair pose sur un visuel. */
+  .bouton-clair {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-blanc);
+    color: var(--color-encre);
+    padding: 1rem 2.25rem;
+    transition: background-color 0.35s var(--ease-couture),
+      color 0.35s var(--ease-couture);
+  }
+
+  .bouton-clair:hover {
+    background: var(--color-encre);
+    color: var(--color-blanc);
+  }
+
+  /* Soulignement qui se deroule depuis la gauche. */
+  .lien-file {
+    position: relative;
+    display: inline-block;
+  }
+
+  .lien-file::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.2em;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.45s var(--ease-couture);
+  }
+
+  .lien-file:hover::after,
+  .lien-file:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  /* Marge horizontale commune. */
+  .gouttiere {
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .gouttiere {
+      padding-inline: 1.5rem;
+    }
+  }
+}
+
+@layer utilities {
+  /* Marqueur inerte.
+     Cette classe portait `opacity: 0` pour preparer les reveals au scroll.
+     C'etait une faute : des qu'un declencheur se calculait mal — ce que les
+     sections collantes provoquent facilement — le contenu restait invisible
+     pour toujours, et des pans entiers de page apparaissaient blancs.
+     L'etat initial est desormais pose par GSAP lui-meme : si le script
+     n'aboutit pas, le contenu reste simplement visible. */
+  .avant-reveal {
+    opacity: 1;
+  }
+
+  .texte-equilibre {
+    text-wrap: pretty;
+  }
+}
+
+/* ==========================================================================
+   Accessibilite : mouvement reduit.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .avant-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+}
+
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-blanc);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-filet);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gris);
+  }
 }
